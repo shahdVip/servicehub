@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './user.entity';
@@ -29,5 +29,22 @@ export class UsersService {
       where: { email },
       select: ['id', 'email', 'name', 'role', 'password'],
     });
+  }
+  /**
+   * Finds a single user by their ID.
+   * @param id The UUID of the user to find.
+   * @returns The full user entity.
+   * @throws NotFoundException if no user is found with the given ID.
+   */
+  async findOneById(id: string): Promise<User> {
+    const user = await this.usersRepository.findOneBy({ id });
+
+    if (!user) {
+      // Throw an exception if the user is not found.
+      // This is important for security and data integrity.
+      throw new NotFoundException(`User with ID "${id}" not found`);
+    }
+
+    return user;
   }
 }
