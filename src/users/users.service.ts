@@ -37,10 +37,7 @@ export class UsersService {
    * @throws NotFoundException if no user is found with the given ID.
    */
   async findOneById(id: string): Promise<User> {
-    console.log('find by id', id);
-
     const user = await this.usersRepository.findOneBy({ id });
-    console.log('user:', user);
 
     if (!user) {
       // Throw an exception if the user is not found.

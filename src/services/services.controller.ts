@@ -37,16 +37,8 @@ export class ServicesController {
     @Body() createServiceDto: CreateServiceDto,
     @User() jwtPayload: JwtPayload, // This correctly injects the JWT payload
   ) {
-    // --- VITAL DEBUGGING LOG ---
-    console.log('--- CREATE SERVICE REQUEST ---');
-    console.log('JWT Payload Received by Controller:', jwtPayload);
-    console.log('jwtpayload.sub', jwtPayload.email);
-
-    // Fetch the full User entity from the database using the ID from the JWT
     const provider = await this.usersService.findOneById(jwtPayload.sub);
-    console.log(provider);
 
-    // Now, pass the full entity to the create service method
     return this.servicesService.create(createServiceDto, provider);
   }
 
